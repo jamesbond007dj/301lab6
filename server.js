@@ -20,8 +20,6 @@ app.get('/location', (request, response)=> {
  catch(error) {
    Error (error , response);
  }
-   
- 
 });
 
 
@@ -30,7 +28,6 @@ function locationData(location) {
   console.log(geoData);
   const locationObject = new Location (location, geoData);
   return locationObject;
-
 }
 
 function Location (city, geoData) {
