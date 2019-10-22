@@ -1,8 +1,7 @@
 'use strict'
 
-const express =require('express');
+const express = require('express');
 require('dotenv').config();
-
 const cors = require('cors');
 
 const app = express();
@@ -14,7 +13,7 @@ app.get('/location', (request, response)=> {
  try{
   const city = request.query.data;
 
-  const locationData = location(city);
+  const locations = locationData(city);
   console.log(locationData);
   response.send(locationData);
  }
@@ -34,7 +33,7 @@ function locationData(location) {
 
 }
 
-function location (city, geoData) {
+function Location (city, geoData) {
   this.search_query = city;
   this.formatted_query = geoData.results[0].formatted_address;
   this.latitude = geoData.results[0].geometry.location.lat;
@@ -43,11 +42,11 @@ function location (city, geoData) {
 
 
 app.get('/weather', (request, response)=> {
-  const darkskyData = require('.data/darksky.json')
+  const darkskyData = require('./data/darksky.json')
   const tempArray = [];
 
   darkskyData.daily.data.forEach (object => {
-    let tempValue = new Weather (object);
+    let tempValue = new Weather(object);
     tempArray.push(tempValue);
   }) 
   try{
@@ -59,7 +58,7 @@ app.get('/weather', (request, response)=> {
 });
 
 function Weather (object) {
-  this.forecast = object.situation
+  this.forecast = object.summary
   this.time = this.revisedDate(object.time);
 }
 
