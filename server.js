@@ -14,13 +14,33 @@ app.get('/location', (request, response)=> {
   const city = request.querry.data;
 
   const locationData =searchLatToLong(city);
-
-  response.send(cityData);
+  console.log(locationData);
+  response.send(locationData);
 });
+
+
+
+// {
+//   "search_query": "seattle",
+//   "formatted_query": "Seattle, WA, USA",
+//   "latitude": "47.606210",
+//   "longitude": "-122.332071"
+// }
+
 
 function locationData(location) {
   const geoData = require('./data/geo.json');
+  console.log(geoData);
+  const locationObject = new Location (location, geoData);
+  return locationObject;
 
+}
+
+function location (city, geoData) {
+  this.search_querry = city;
+  this.formatted_querry = geoData.results[0].formatted_address;
+  this.latitude = geoData.results[0].geometry.location.lat;
+  this.longitude = geoData.results[0].geometry.location.lng;
 }
 
 app.get('*' , (request , response ) => {
