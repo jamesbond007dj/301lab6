@@ -48,5 +48,37 @@ app.get('*' , (request , response ) => {
   response.send('problem');
 }),
 
+// [
+//   {
+//     "forecast": "Partly cloudy until afternoon.",
+//     "time": "Mon Jan 01 2001"
+//   },
+//   {
+//     "forecast": "Mostly cloudy in the morning.",
+//     "time": "Tue Jan 02 2001"
+//   },
+
+app.get('/weather', (request, response)=> {
+  const darkskyData = require('.data/darksky.json')
+  const tempArray = [];
+
+  darkskyData.daily.data.forEach (object => {
+    let tempValue = new Weather (object);
+    tempArray.push(tempValue);
+  }) 
+
+  response.status(200).send(tempArray);
+   
+});
+
+function Weather (object) {
+  this.forecast = object.situation
+  this.time = this.revisedDate(object.time);
+}
+
+Weather.prototype.revisedDate = function (time){
+let date = new Date(time*1000);
+return date.toDateString()
+}
 
 app.listen(PORT, () => console.log (`app is listening on ${PORT}`));
