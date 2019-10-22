@@ -11,21 +11,19 @@ app.use(cors());
 const PORT = process.env.PORT || 3003
 
 app.get('/location', (request, response)=> {
+ try{
   const city = request.querry.data;
 
   const locationData =searchLatToLong(city);
   console.log(locationData);
   response.send(locationData);
+ }
+ catch(error) {
+   Error (error , response);
+ }
+   
+ 
 });
-
-
-
-// {
-//   "search_query": "seattle",
-//   "formatted_query": "Seattle, WA, USA",
-//   "latitude": "47.606210",
-//   "longitude": "-122.332071"
-// }
 
 
 function locationData(location) {
@@ -43,20 +41,6 @@ function location (city, geoData) {
   this.longitude = geoData.results[0].geometry.location.lng;
 }
 
-app.get('*' , (request , response ) => {
-  response.status(404);
-  response.send('problem');
-}),
-
-// [
-//   {
-//     "forecast": "Partly cloudy until afternoon.",
-//     "time": "Mon Jan 01 2001"
-//   },
-//   {
-//     "forecast": "Mostly cloudy in the morning.",
-//     "time": "Tue Jan 02 2001"
-//   },
 
 app.get('/weather', (request, response)=> {
   const darkskyData = require('.data/darksky.json')
@@ -66,9 +50,12 @@ app.get('/weather', (request, response)=> {
     let tempValue = new Weather (object);
     tempArray.push(tempValue);
   }) 
-
+  try{
   response.status(200).send(tempArray);
-   
+  }
+  catch(error) {
+  Error (error , response)
+  }
 });
 
 function Weather (object) {
@@ -80,5 +67,15 @@ Weather.prototype.revisedDate = function (time){
 let date = new Date(time*1000);
 return date.toDateString()
 }
+
+function Error (error , response) {
+  console.error(error);
+  return response.status(500).send('Sorry, there is a temporary problem.Please try it later.');
+  
+}
+app.get('*' , (request , response ) => {
+  response.status(404);
+  response.send('Server connection problem');
+}),
 
 app.listen(PORT, () => console.log (`app is listening on ${PORT}`));
