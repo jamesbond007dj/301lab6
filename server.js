@@ -12,9 +12,9 @@ const PORT = process.env.PORT || 3003
 
 app.get('/location', (request, response)=> {
  try{
-  const city = request.querry.data;
+  const city = request.query.data;
 
-  const locationData =searchLatToLong(city);
+  const locationData = location(city);
   console.log(locationData);
   response.send(locationData);
  }
@@ -35,8 +35,8 @@ function locationData(location) {
 }
 
 function location (city, geoData) {
-  this.search_querry = city;
-  this.formatted_querry = geoData.results[0].formatted_address;
+  this.search_query = city;
+  this.formatted_query = geoData.results[0].formatted_address;
   this.latitude = geoData.results[0].geometry.location.lat;
   this.longitude = geoData.results[0].geometry.location.lng;
 }
